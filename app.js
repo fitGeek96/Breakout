@@ -6,6 +6,48 @@ const canvasEl = document.getElementById('canvas');
 const canvas = canvasEl.getContext('2d');
 
 let score = 0;
+const brickRowCount = 9;
+const brickColumnCount = 5;
+
+// Create Bricks props
+const brickInfo = {
+    w: 70,
+    h: 20,
+    padding: 10,
+    offsetX: 45,
+    offsetY: 60,
+    visible: true
+};
+
+
+// Create bricks 
+const bricks = [];
+for (let i = 0; i < brickRowCount; i++) {
+    bricks[i] = [];
+    for (let j = 0; j < brickColumnCount; j++) {
+        const x = i * (brickInfo.w + brickInfo.padding) + brickInfo.offsetX;
+        const y = j * (brickInfo.h + brickInfo.padding) + brickInfo.offsetY;
+        bricks[i][j] = {
+            x,
+            y,
+            ...brickInfo
+        };
+
+    }
+}
+
+// Draw bricks on Canvas
+function drawBricks() {
+    bricks.forEach(column => {
+        column.forEach(brick => {
+            canvas.beginPath();
+            canvas.rect(brick.x, brick.y, brick.w, brick.h);
+            canvas.fillStyle = brick.visible ? '#0095dd' : 'transparent';
+            canvas.fill();
+            canvas.closePath();
+        });
+    });
+}
 
 
 // Create ball props
@@ -29,9 +71,9 @@ const paddle = {
 };
 
 // Draw Score on Canvas 
-function drawScore(){
+function drawScore() {
     canvas.font = '20px Arial';
-    canvas.fillText(`Score: ${score}`, canvas.width - 100, 30);
+    canvas.fillText(`Score: ${score}`, canvasEl.width - 100, 30);
 }
 
 // Draw Paddle On Canvas
@@ -55,6 +97,8 @@ function drawBall() {
 function draw() {
     drawBall();
     drawPaddle();
+    drawScore();
+    drawBricks();
 }
 
 draw();
