@@ -95,13 +95,61 @@ function drawBall() {
 }
 
 function draw() {
+    // Clear Canvas
+    canvas.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
     drawBall();
     drawPaddle();
     drawScore();
     drawBricks();
 }
 
-draw();
+// Move paddle on Canvas
+function movePaddle() {
+    paddle.x += paddle.dx;
+    // Wall Detection 
+    if (paddle.x + paddle.w > canvasEl.width) {
+        paddle.x = canvasEl.width - paddle.w;
+    }
+
+    if (paddle.x < 0) {
+        paddle.x = 0;
+    }
+}
+
+// Update Canvas Drawing and Animation 
+
+function update() {
+    movePaddle();
+    // Draw Everything 
+    draw();
+
+    requestAnimationFrame(update)
+
+}
+
+update();
+
+// Keydown event 
+function keyDown(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        paddle.dx = paddle.speed;
+    } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        paddle.dx = -(paddle.speed);
+    }
+}
+
+// Keyup event 
+function KeyUp(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'Left' || e.key === 'ArrowLeft') {
+        paddle.dx = 0;
+    }
+}
+
+
+// KeyBoard event Handlers
+document.addEventListener('keydown', keyDown);
+document.addEventListener('keyup', KeyUp);
 
 // Rules and Close event handlers
 
